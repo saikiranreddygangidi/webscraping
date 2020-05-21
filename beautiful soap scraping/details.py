@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 data=[]
 import pandas as pd
 import re
-for i in range(1,10):
+for i in range(20,30):
     da=[]
     k="https://www.filmibeat.com/scripts/popcorn/controllers/celeb-search.php?lang=all&limit={}&start_with=all".format(i)
     da.append(i)
@@ -43,12 +43,14 @@ for i in range(1,10):
     else:
      da.append('no-photo')
     if title3!=None:
-     s1=requests.get(title3.find('a').get('href'))
-     soup2 =BeautifulSoup(s1.content,'html.parser')
-     title5=soup2.find('div',{'class':'bharat-story'})
-     if title5!=None:
-      text=title5.get_text()
-      da.append(re.findall('(.*)\n',text)[1])
+     text=title3.find('a')
+     if text!=None:
+      s1=requests.get(title3.find('a').get('href'))
+      soup2 =BeautifulSoup(s1.content,'html.parser')
+      title5=soup2.find('div',{'class':'bharat-story'})
+      if title5!=None:
+       text=title5.get_text()
+       da.append(re.findall('(.*)\n',text)[1])
     da.append(title.get_text())
     data.append(da)
     print(da)
@@ -56,6 +58,5 @@ for i in range(1,10):
 df=pd.DataFrame(data,columns=['id','is_disable','name','gender','Dateofbirth','Birth place','image','bio','orginal_name'])   
 import os
 #os.remove("data1.csv")
-#with open('data1.csv', 'a') as f:
- #   df.to_csv(f)
-df.to_csv(r'data1.csv', index = False)
+df.to_csv(r'data1.csv',mode='a',index = False)
+#df.to_csv(r'data1.csv', index = False)
